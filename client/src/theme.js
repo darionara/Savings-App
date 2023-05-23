@@ -145,6 +145,19 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          marginRight: '1em',
+          boxShadow: 'none',
+          textTransform: 'capitalize',
+          fontWeight: '600',
+          ':hover, :active': {
+            boxShadow: 'none',
+          },
+        }
+      }
+    },
   },
 });
 
