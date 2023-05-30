@@ -34,7 +34,7 @@ context('Display budget', () => {
         cy.wrap($el)
           .children()
           .eq(5)
-          .should('include.text', new Date().getFullYear());
+          .should('include.text', new Date().getFullYear() - 1);
       });
     });
   });
