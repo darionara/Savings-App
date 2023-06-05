@@ -1,4 +1,4 @@
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import NoContentImage from '../../assets/no_content.png';
 
 export const NoContent = () => {
@@ -11,15 +11,18 @@ export const NoContent = () => {
         flexDirection: 'column',
       }}
     > 
-      <Container
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
-        <img src={NoContentImage} alt="Document, coins and calculator graphics"/>
-        <Typography color="rgba(51, 51, 51, 0.5)">Brak danych do wyświetlenia</Typography>
-      </Container>
+      <img 
+        src={NoContentImage} 
+        alt=""
+        width={202}
+        height={202}
+        loading='lazy'
+        />
+      <Typography 
+        color='#33333350'
+      >
+        Brak danych do wyświetlenia
+      </Typography>
     </Box>
   );
 };

@@ -21,8 +21,19 @@ export const Error = ({ error }) => {
             flexDirection: 'column',
             alignItems: 'center',
           }}>
-          <img src={ErrorImage} alt="Astronauts floating in space"/>
-          <Typography color="rgba(51, 51, 51, 0.5)">Wystąpił nieoczekiwany błąd</Typography>
+          <img 
+            src={ErrorImage} 
+            alt=""
+            style={{
+              height: '100%',
+              weight: '100%',
+              maxHeight: '248px',
+              maxWidth: '248px',
+            }}
+          />
+          <Typography color="rgba(51, 51, 51, 0.5)">
+            Wystąpił nieoczekiwany błąd
+          </Typography>
         </Container>
       }
     </Box>
