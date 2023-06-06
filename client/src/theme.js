@@ -138,6 +138,15 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiCardActions: {
+      styleOverrides: {
+        root: {
+          '>:not(:first-of-type)': {
+            marginLeft: '12px',
+          },
+        }
+      }
+    },
     MuiToolbar: {
       styleOverrides: {
         root: {
@@ -148,12 +157,14 @@ theme = createTheme(theme, {
     MuiButton: {
       styleOverrides: {
         root: {
-          marginRight: '1em',
           boxShadow: 'none',
           textTransform: 'capitalize',
-          fontWeight: '600',
+          fontWeight: '500',
           ':hover, :active': {
             boxShadow: 'none',
+          },
+          ':not(:first-of-type)': {
+            marginLeft: '16px',
           },
         }
       }

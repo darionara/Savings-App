@@ -1,21 +1,36 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { BudgetService } from '../api/services/BudgetService';
-
+import { BUDGET_QUERY } from 'queryKeys';
 import { ActionHeader, Card, Page, Table, Loader, Error, NoContent, Money, LocalizedDate, CategoryCell, Button } from 'ui';
 import { Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { AddNewBudgetRecord } from '../ui/organisms/AddNewBudgetRecord.modal';
 
 export const BudgetPage = () => {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  const fetchTableData = async () => {
-    return await BudgetService.findAll();
-  }
+  const handleSubmit = () => {
+    console.log('Submit');
+    setIsModalOpen(false)
+  };
 
-  const { isLoading, isError, data: tableData } = useQuery({
-    queryKey: ['tableData'],
-    queryFn: fetchTableData,
-  })
+  const queryClient = useQueryClient();
+
+  const { isLoading, isError, data, error} = useQuery({
+    queryKey: [BUDGET_QUERY],
+    queryFn: () => BudgetService.findAll(),
+  });
+
+  const mutation = useMutation({
+    mutationFn: (selectedRows) => {
+      return BudgetService.remove({ ids: selectedRows })
+    }, 
+    onSuccess: async () => {
+      await queryClient.invalidateQueries([BUDGET_QUERY])
+    }});
+
+  const deleteRecords = (selectedRows) => mutation.mutate(selectedRows);
 
   const headCells = [
     {id: '1', label: 'Nazwa', renderCell: (row) => <CategoryCell name={row.category.name} color={row.category.color} />},
@@ -31,23 +46,7 @@ export const BudgetPage = () => {
       }
     }},
     {id: '5', label: 'Data utworzenia', renderCell: (row) => <LocalizedDate date={row.createdAt} />},
-  ]
-
-  const getUniqueId = (row) => row.id;
-
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: (selectedRows) => {
-      return BudgetService.remove({ ids: selectedRows})
-    }, 
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['tableData']})
-    }})
-
-  const deleteRecords = (selectedRows) => {
-    mutation.mutate(selectedRows)
-  }
+  ];
 
   return (
     <Page title="Budżet">
@@ -61,6 +60,7 @@ export const BudgetPage = () => {
                 color='primary'
                 variant='contained'
                 startIcon={<AddIcon />}
+                onClick={() => setIsModalOpen(true)}
               >
                 Zdefiniuj budżet
               </Button>
@@ -73,12 +73,12 @@ export const BudgetPage = () => {
            {isLoading ? (
               <Loader/>
             ) : isError ? (
-              <Error/>
-            ) : tableData && tableData.length > 0 ? (
+              <Error error={error}/>
+            ) : data && data.length > 0 ? (
               <Table
                 headCells={headCells}
-                rows={tableData}
-                getUniqueId={getUniqueId}
+                rows={data}
+                getUniqueId={(row) => row.id}
                 deleteRecords={deleteRecords}
               />
             ) : (
@@ -86,6 +86,11 @@ export const BudgetPage = () => {
             )}
           </Grid>
         </Grid>
+
+        <AddNewBudgetRecord onClose={() => setIsModalOpen(false)}
+                            open={isModalOpen}
+                            onSubmit={handleSubmit} />
+
       </Card>
     </Page>
   );
