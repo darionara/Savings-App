@@ -9,8 +9,7 @@
     "--legacy-peer-deps": "^0.0.1-security.6",
     "axios": "^0.24.0",
     "cypress": "^9.1.0",
-    "prettier": "2.5.1",
-    "react-hook-form": "^7.44.3"
+    "prettier": "2.5.1"
   },
   "scripts": {
     "postinstall": "npm --prefix server/ install --legacy-peer-deps && npm --prefix client/ install --legacy-peer-deps",
