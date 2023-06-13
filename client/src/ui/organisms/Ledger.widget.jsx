@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { LedgerService } from '../../api/services/LedgerService';
 import { LEDGER_QUERY } from 'queryKeys';
@@ -9,12 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { AddNewLedgerRecord } from './AddNewLedgerRecord.modal';
 
 export const LedgerWidget = () => {
-  const [openModalType, setOpenModalType] = React.useState(null);
-
-  const handleSubmit = () => {
-    console.log('Submit');
-    setOpenModalType(null)
-  };
+  const [openModalType, setOpenModalType] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -23,7 +18,7 @@ export const LedgerWidget = () => {
     queryFn: () => LedgerService.findAll()
   });
 
-  const mutation = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: (selectedRows) => {
       return LedgerService.remove({ ids: selectedRows })
     }, 
@@ -31,7 +26,7 @@ export const LedgerWidget = () => {
       await queryClient.invalidateQueries([LEDGER_QUERY])
     }});
 
-  const deleteRecords = (selectedRows) => mutation.mutate(selectedRows);
+  const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);
 
   const headCells = [
     {id: '1', label: 'Nazwa', renderCell: (row) => row.title},
@@ -94,8 +89,7 @@ export const LedgerWidget = () => {
 
         <AddNewLedgerRecord type={openModalType} 
                             onClose={() => setOpenModalType(null)} 
-                            open={!!openModalType} 
-                            onSubmit={handleSubmit} />
+                            open={!!openModalType} />
 
       </Card>
   );

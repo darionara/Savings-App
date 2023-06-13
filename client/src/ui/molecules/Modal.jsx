@@ -14,12 +14,12 @@ export const Modal = ({ description, children, onClose, open, onSubmit, disabled
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 450,
+    width: 390,
   };
 
   const CardActionsStyle = {
     justifyContent: 'flex-end', 
-    marginTop: 60,
+    marginTop: 45,
     padding: 0,
   };
 
@@ -58,7 +58,7 @@ export const Modal = ({ description, children, onClose, open, onSubmit, disabled
 
 Modal.propTypes = {
   description: PropTypes.string,
-  children: PropTypes.string,
+  children: PropTypes.node,
   onClose: PropTypes.func,
   open: PropTypes.bool,
   onSubmit: PropTypes.func,
