@@ -1,55 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { CategoryService } from '../../api/services/CategoryService';
-import { CATEGORIES_QUERY } from 'queryKeys';
-import { BudgetService } from '../../api/services/BudgetService';
-import { BUDGET_QUERY } from 'queryKeys';
-import { Modal } from '../molecules/Modal';
-import { TextField } from '@mui/material';
+import { CategoryService, BudgetService } from 'api';
+import { NOT_SELECTED_CATEGORIES_QUERY, BUDGET_QUERY } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
-import { CategorySelect } from '../molecules/CategorySelect';
+import { Modal, CategorySelect, AmountFormField, Loader, Error, NoContent } from 'ui';
+import { formatDollarsToCents } from 'utils';
 
 export const AddNewBudgetRecord = ({ onClose, open}) => {
-  const [categories, setCategories] = useState([]);
-  const [selected, setSelected] = useState('');
-  
-  const handleChange = (category) => {
-    setSelected(category);
-  };
+  const queryClient = useQueryClient();
 
-  const { data } = useQuery({
-    queryKey: [CATEGORIES_QUERY],
+  const { isLoading, error, data: categories } = useQuery({
+    queryKey: [NOT_SELECTED_CATEGORIES_QUERY],
     queryFn: () => CategoryService.findAll(true)
   });
-
-  const queryClient = useQueryClient();
 
   const createMutation = useMutation({
     mutationFn: (formData) => {
       return BudgetService.create({ requestBody: formData })
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries([BUDGET_QUERY])
+      await queryClient.invalidateQueries([BUDGET_QUERY]);
+      await queryClient.invalidateQueries([NOT_SELECTED_CATEGORIES_QUERY]);
+      onClose();
+      reset();
     }
   });
 
-  useEffect(() => {
-    if (data) {
-      setCategories(data)
-    }
-  },[data]);
-
   const { handleSubmit, control, formState: { errors, isValid }, reset } = useForm({
     defaultValues: {
-      amount: ''
+      amount: '',
+      category: ''
     },
     mode: 'onChange'
   });
 
   const handleFormSubmit = (formData) => {
     createMutation.mutate({ 
-      amountInCents: formData.amount*100, 
-      categoryId: formData === '' ? null : selected
+      amountInCents: formatDollarsToCents(formData.amount), 
+      categoryId: formData.category 
     });
     onClose()
     reset()
@@ -69,39 +58,41 @@ export const AddNewBudgetRecord = ({ onClose, open}) => {
            onSubmit={handleSubmit(handleFormSubmit)}
            disabled={!isValid}
            >
-      <div style={formStyle}>
-      <Controller
-          name='amount'
-          type='number'
-          control={control}
-          rules={{
-            required: 'Kwota nie może być pusta',
-            validate: {
-              greaterThanZero: value => value > 0 || 'Kwota musi być większa niż 0',
-              lessThanMillion: value => value < 1000000 || 'Kwota nie może być większa niż 1000000'
-            }
-          }}
-          render={({ field }) => (
-            <TextField {...field} 
-              label="Kwota"
-              error={!!errors.amount}
-              helperText={errors.amount?.message}
-            >
-            </TextField>
-        )} 
-        />
-        <Controller 
+        {isLoading && <Loader />}
+        {error && <Error error={error} />}
+        {!isLoading && !error && !categories?.length ? (
+          <NoContent />
+        ) : (
+        <div style={formStyle}>
+          <AmountFormField 
+            control={control}
+            errors={errors} 
+            lessThan={1000000}
+          />
+          <Controller 
             name='category'
             control={control}
-            render={({ field }) => (
-              <CategorySelect {...field} 
-                onChange={handleChange} 
-                categories={categories} 
-                selected={selected}>
+            rules={{
+              required: 'Wybierz kategorię'
+            }} 
+            render={({ field: { onChange, value } }) => (
+              <CategorySelect
+                onChange={onChange}
+                value={value} 
+                categories={categories}
+                error={!!errors.category}
+                helperText={errors.category?.message}
+                >
               </CategorySelect>
             )} 
           />
-      </div>
+        </div>
+      )}
     </Modal>
   );
 };
+
+AddNewBudgetRecord.propTypes = {
+  open: PropTypes.bool,
+  onclose: PropTypes.func
+}

@@ -1,28 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { CategoryService } from '../../api/services/CategoryService';
-import { LedgerService } from '../../api/services/LedgerService';
-import { CATEGORIES_QUERY } from 'queryKeys';
-import { LEDGER_QUERY } from 'queryKeys';
-import { Modal } from '../molecules/Modal';
+import { CategoryService, LedgerService } from 'api';
+import { CATEGORIES_QUERY, LEDGER_QUERY, BUDGET_QUERY } from 'queryKeys';
+import { Modal, CategorySelect, Loader, Error, NoContent, AmountFormField} from 'ui';
 import { TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { CategorySelect } from '../molecules/CategorySelect';
+import { formatDollarsToCents } from 'utils';
+
+const descriptions = {
+  INCOME: 'Dodaj wpływ',
+  EXPENSE: 'Dodaj wydatek'
+};
 
 export const AddNewLedgerRecord = ({ type, onClose, open }) => {
-  const [categories, setCategories] = useState([]);
-  const [selected, setSelected] = useState('');
+  const queryClient = useQueryClient();
 
-  const handleChange = (category) => {
-    setSelected(category);
-  };
-
-  const { data } = useQuery({
+  const { isLoading, error, data: categories } = useQuery({
     queryKey: [CATEGORIES_QUERY],
     queryFn: () => CategoryService.findAll()
   });
-
-  const queryClient = useQueryClient();
 
   const createMutation = useMutation({
     mutationFn: (formData) => {
@@ -30,19 +27,17 @@ export const AddNewLedgerRecord = ({ type, onClose, open }) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries([LEDGER_QUERY]);
+      await queryClient.invalidateQueries([BUDGET_QUERY]);
+      onClose();
+      reset();
     }
   });
-
-  useEffect(() => {
-    if (data) {
-      setCategories(data)
-    }
-  },[data]);
 
   const { handleSubmit, control, formState: { errors, isValid }, reset } = useForm({
     defaultValues: {
       title: '',
-      amount: ''
+      amount: '',
+      category: ''
     },
     mode: 'onChange'
   });
@@ -51,18 +46,12 @@ export const AddNewLedgerRecord = ({ type, onClose, open }) => {
     createMutation.mutate({ 
       mode: type, 
       title: formData.title, 
-      amountInCents: formData.amount*100, 
-      categoryId: formData === '' ? null : selected
-    })
-    onClose()
-    setSelected('')
-    reset()
+      amountInCents: formatDollarsToCents(formData.amount), 
+      categoryId: formData.category 
+    });
+    onClose();
+    reset();
   }
-
-  const descriptions = {
-    INCOME: 'Dodaj wpływ',
-    EXPENSE: 'Dodaj wydatek'
-  };
 
   const formStyle = {
     marginTop: 37,
@@ -76,60 +65,65 @@ export const AddNewLedgerRecord = ({ type, onClose, open }) => {
            onClose={onClose}
            onSubmit={handleSubmit(handleFormSubmit)}
            open={open}
-           disabled={!isValid}>
-      <div style={formStyle}>
-        <Controller
-          name='title'
-          control={control}
-          rules={{
-            required: 'Nazwa nie może byc pusta',
-            validate: {
-              noEmptySpaces: value => !value.trim().length ? 'Nazwa nie może byc pusta' : true
-            }
-          }}
-          render={({ field }) => (
-            <TextField {...field} 
-              label='Nazwa'
-              error={!!errors.title} 
-              helperText={errors.title?.message}
-            >
-            </TextField>
-        )}
-        />
-        <Controller
-          name='amount'
-          type='number'
-          control={control}
-          rules={{
-            required: 'Kwota nie może być pusta',
-            validate: {
-              greaterThanZero: value => value > 0 || 'Kwota musi być większa niż 0',
-              lessThanMillion: value => value < 1000000 || 'Kwota nie może być większa niż 1000000'
-            }
-          }}
-          render={({ field }) => (
-            <TextField {...field} 
-              label='Kwota'
-              error={!!errors.amount}
-              helperText={errors.amount?.message}
-            >
-            </TextField>
-        )} 
-        />
-        {type === 'EXPENSE' && (
-          <Controller 
-            name='category'
+           disabled={!isValid}
+          >
+        {isLoading && <Loader />}
+        {error && <Error error={error} />}
+        {!isLoading && !error && !categories?.length ? (
+          <NoContent />
+        ) : (
+        <div style={formStyle}>
+          <Controller
+            name='title'
             control={control}
+            rules={{
+              required: 'Nazwa nie może byc pusta',
+              validate: {
+                noEmptySpaces: value => !value.trim().length ? 'Nazwa nie może byc pusta' : true
+              }
+            }}
             render={({ field }) => (
-              <CategorySelect {...field} 
-                onChange={handleChange} 
-                categories={categories} 
-                selected={selected}>
-              </CategorySelect>
-            )} 
+              <TextField {...field} 
+                label='Nazwa'
+                type='text'
+                error={!!errors.title} 
+                helperText={errors.title?.message}
+              >
+              </TextField>
+            )}
           />
-        )}
-      </div>
+          <AmountFormField 
+            control={control}
+            errors={errors} 
+            lessThan={1000000}
+          />
+          {type === 'EXPENSE' && (
+            <Controller 
+              name='category'
+              control={control}
+              rules={{
+                required: 'Wybierz kategorię'
+              }} 
+              render={({ field: {onChange, value} }) => (
+                <CategorySelect
+                  onChange={onChange}
+                  value={value}
+                  categories={categories} 
+                  error={!!errors.category}
+                  helperText={errors.category?.message}
+                  >
+                </CategorySelect>
+              )} 
+            />
+          )}
+       </div>
+      )}
     </Modal>
   );
+};
+
+AddNewLedgerRecord.propTypes = {
+  type: PropTypes.string,
+  onClose: PropTypes.func,
+  open: PropTypes.bool
 };

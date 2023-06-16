@@ -10,11 +10,6 @@ import { AddNewBudgetRecord } from '../ui/organisms/AddNewBudgetRecord.modal';
 export const BudgetPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-/*   const handleSubmit = (formData) => {
-    createMutation.mutate({ amountInCents: formData.amount, categoryId: formData.category});
-    setIsModalOpen(false);
-  }; */
-
   const queryClient = useQueryClient();
 
   const { isLoading, isError, data, error} = useQuery({
@@ -29,15 +24,6 @@ export const BudgetPage = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries([BUDGET_QUERY])
     }});
-
-/*   const createMutation = useMutation({
-    mutationFn: (formData) => {
-      return BudgetService.create({ requestBody: formData })
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries([BUDGET_QUERY])
-    }
-  }); */
 
   const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);
 

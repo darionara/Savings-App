@@ -1,11 +1,9 @@
 import React from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import { CategoryCell } from '../molecules/CategoryCell';
+import { PropTypes } from 'prop-types';
+import { InputLabel, FormControl, Select, MenuItem } from '@mui/material';
+import { CategoryCell } from 'ui';
 
-export const CategorySelect = ({ categories, onChange, selected }) => {
+export const CategorySelect = ({ categories, onChange, value }) => {
   const handleChange = (event) => {
     onChange(event.target.value);
   };
@@ -14,9 +12,9 @@ export const CategorySelect = ({ categories, onChange, selected }) => {
     <FormControl>
       <InputLabel id="category-label">Wybierz kategorię</InputLabel>
       <Select
-        value={selected}
+        value={value}
         onChange={handleChange}
-        label="Wybierz kategorię"
+        label="Kategoria"
         labelId="category-label"
       >
         {categories.map((category) => (
@@ -28,3 +26,9 @@ export const CategorySelect = ({ categories, onChange, selected }) => {
     </FormControl>
   );
 };
+
+CategorySelect.propTypes = {
+  categories: PropTypes.any,
+  onChange: PropTypes.func,
+  value: PropTypes.string
+}
