@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { BudgetService } from '../api/services/BudgetService';
 import { BUDGET_QUERY } from 'queryKeys';
@@ -8,12 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { AddNewBudgetRecord } from '../ui/organisms/AddNewBudgetRecord.modal';
 
 export const BudgetPage = () => {
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-
-  const handleSubmit = () => {
-    console.log('Submit');
-    setIsModalOpen(false)
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -22,7 +17,7 @@ export const BudgetPage = () => {
     queryFn: () => BudgetService.findAll(),
   });
 
-  const mutation = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: (selectedRows) => {
       return BudgetService.remove({ ids: selectedRows })
     }, 
@@ -30,7 +25,7 @@ export const BudgetPage = () => {
       await queryClient.invalidateQueries([BUDGET_QUERY])
     }});
 
-  const deleteRecords = (selectedRows) => mutation.mutate(selectedRows);
+  const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);
 
   const headCells = [
     {id: '1', label: 'Nazwa', renderCell: (row) => <CategoryCell name={row.category.name} color={row.category.color} />},
@@ -88,8 +83,7 @@ export const BudgetPage = () => {
         </Grid>
 
         <AddNewBudgetRecord onClose={() => setIsModalOpen(false)}
-                            open={isModalOpen}
-                            onSubmit={handleSubmit} />
+                            open={isModalOpen}/>
 
       </Card>
     </Page>
