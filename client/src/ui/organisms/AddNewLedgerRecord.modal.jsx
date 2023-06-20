@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { CategoryService, LedgerService } from 'api';
-import { CATEGORIES_QUERY, LEDGER_QUERY, BUDGET_QUERY } from 'queryKeys';
+import { CATEGORIES_QUERY, LEDGER_QUERY, BUDGET_QUERY, SUMMARY_QUERY } from 'queryKeys';
 import { Modal, CategorySelect, Loader, Error, NoContent, AmountFormField} from 'ui';
 import { TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
@@ -28,6 +28,7 @@ export const AddNewLedgerRecord = ({ type, onClose, open }) => {
     onSuccess: async () => {
       await queryClient.invalidateQueries([LEDGER_QUERY]);
       await queryClient.invalidateQueries([BUDGET_QUERY]);
+      await queryClient.invalidateQueries([SUMMARY_QUERY]);
       onClose();
       reset();
     }
@@ -77,7 +78,7 @@ export const AddNewLedgerRecord = ({ type, onClose, open }) => {
             name='title'
             control={control}
             rules={{
-              required: 'Nazwa nie może byc pusta',
+              required: 'Nazwa nie może być pusta',
               validate: {
                 noEmptySpaces: value => !value.trim().length ? 'Nazwa nie może byc pusta' : true
               }

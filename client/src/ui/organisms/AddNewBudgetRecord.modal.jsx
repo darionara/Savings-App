@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { CategoryService, BudgetService } from 'api';
-import { NOT_SELECTED_CATEGORIES_QUERY, BUDGET_QUERY } from 'queryKeys';
+import { NOT_SELECTED_CATEGORIES_QUERY, BUDGET_QUERY, SUMMARY_QUERY } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
 import { Modal, CategorySelect, AmountFormField, Loader, Error, NoContent } from 'ui';
 import { formatDollarsToCents } from 'utils';
@@ -22,6 +22,7 @@ export const AddNewBudgetRecord = ({ onClose, open}) => {
     onSuccess: async () => {
       await queryClient.invalidateQueries([BUDGET_QUERY]);
       await queryClient.invalidateQueries([NOT_SELECTED_CATEGORIES_QUERY]);
+      await queryClient.invalidateQueries([SUMMARY_QUERY]);
       onClose();
       reset();
     }
