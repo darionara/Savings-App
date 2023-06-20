@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { LedgerService } from 'api';
-import { LEDGER_QUERY } from 'queryKeys';
+import { LEDGER_QUERY, SUMMARY_QUERY, BUDGET_QUERY } from 'queryKeys';
 import { ActionHeader, Card, Button, Table, CategoryCell, AddNewLedgerRecord, Money, LocalizedDate, Loader, Error, NoContent } from 'ui';
 import { Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -22,7 +22,9 @@ export const LedgerWidget = () => {
       return LedgerService.remove({ ids: selectedRows })
     }, 
     onSuccess: async () => {
-      await queryClient.invalidateQueries([LEDGER_QUERY])
+      await queryClient.invalidateQueries([LEDGER_QUERY]);
+      await queryClient.invalidateQueries([BUDGET_QUERY]);
+      await queryClient.invalidateQueries([SUMMARY_QUERY]);
     }});
 
   const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { BudgetService } from '../api/services/BudgetService';
-import { BUDGET_QUERY } from 'queryKeys';
+import { BUDGET_QUERY, SUMMARY_QUERY } from 'queryKeys';
 import { ActionHeader, Card, Page, Table, Loader, Error, NoContent, Money, LocalizedDate, CategoryCell, Button } from 'ui';
 import { Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -22,7 +22,8 @@ export const BudgetPage = () => {
       return BudgetService.remove({ ids: selectedRows })
     }, 
     onSuccess: async () => {
-      await queryClient.invalidateQueries([BUDGET_QUERY])
+      await queryClient.invalidateQueries([BUDGET_QUERY]);
+      await queryClient.invalidateQueries([SUMMARY_QUERY]);
     }});
 
   const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);
