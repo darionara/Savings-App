@@ -16,6 +16,7 @@ export { Table } from './molecules/table/Table';
 export { Modal } from './molecules/Modal';
 export { CategorySelect } from './molecules/CategorySelect';
 export { AmountFormField } from './molecules/AmountFormField';
+export { CustomLegend } from './molecules/CustomLegendChart';
 
 // organisms
 export { AppBar } from './organisms/AppBar';
@@ -23,6 +24,8 @@ export { MainMenu } from './organisms/Menu';
 export { LedgerWidget } from './organisms/Ledger.widget';
 export { AddNewBudgetRecord } from './organisms/AddNewBudgetRecord.modal';
 export { AddNewLedgerRecord } from './organisms/AddNewLedgerRecord.modal';
+export { BalanceChart } from './organisms/BalanceChart';
+export { BudgetChart } from './organisms/BudgetChart';
 
 // templates
 export { Page } from './templates/Page';
