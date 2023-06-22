@@ -7,13 +7,14 @@ import { Modal, CategorySelect, Loader, Error, NoContent, AmountFormField} from 
 import { TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { formatDollarsToCents } from 'utils';
+import { MESSAGES } from 'consts/Notification.messages';
 
 const descriptions = {
   INCOME: 'Dodaj wpływ',
   EXPENSE: 'Dodaj wydatek'
 };
 
-export const AddNewLedgerRecord = ({ type, onClose, open }) => {
+export const AddNewLedgerRecord = ({ type, onClose, open, showNotification }) => {
   const queryClient = useQueryClient();
 
   const { isLoading, error, data: categories } = useQuery({
@@ -25,12 +26,18 @@ export const AddNewLedgerRecord = ({ type, onClose, open }) => {
     mutationFn: (formData) => {
       return LedgerService.create({ requestBody: formData })
     },
-    onSuccess: async () => {
+    onSuccess: async (formData) => {
       await queryClient.invalidateQueries([LEDGER_QUERY]);
       await queryClient.invalidateQueries([BUDGET_QUERY]);
       await queryClient.invalidateQueries([SUMMARY_QUERY]);
       onClose();
       reset();
+      formData.mode === 'INCOME' ? 
+      showNotification(MESSAGES.SUCCESS.ADD_INCOME, 'success') : 
+      showNotification(MESSAGES.SUCCESS.ADD_EXPENSE, 'success')
+    },
+    onError: () => {
+      showNotification(MESSAGES.ERROR, 'error')
     }
   });
 
@@ -126,5 +133,6 @@ export const AddNewLedgerRecord = ({ type, onClose, open }) => {
 AddNewLedgerRecord.propTypes = {
   type: PropTypes.string,
   onClose: PropTypes.func,
-  open: PropTypes.bool
+  open: PropTypes.bool,
+  showNotification: PropTypes.func
 };

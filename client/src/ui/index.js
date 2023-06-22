@@ -9,6 +9,7 @@ export { Loader } from './atoms/Loader';
 export { Error } from './atoms/Error';
 export { NoContent } from './atoms/NoContent';
 export { Card } from './atoms/Card';
+export { StyledSnackbar } from './atoms/Notification';
 
 // molecules
 export { CategoryCell } from './molecules/CategoryCell';
@@ -22,6 +23,7 @@ export { CustomLegend } from './molecules/CustomLegendChart';
 export { AppBar } from './organisms/AppBar';
 export { MainMenu } from './organisms/Menu';
 export { LedgerWidget } from './organisms/Ledger.widget';
+export { BudgetWidget } from './organisms/Budget.widget';
 export { AddNewBudgetRecord } from './organisms/AddNewBudgetRecord.modal';
 export { AddNewLedgerRecord } from './organisms/AddNewLedgerRecord.modal';
 export { BalanceChart } from './organisms/BalanceChart';
