@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { LedgerService } from 'api';
-import { LEDGER_QUERY } from 'queryKeys';
+import { LEDGER_QUERY, SUMMARY_QUERY, BUDGET_QUERY } from 'queryKeys';
 import { ActionHeader, Card, Button, Table, CategoryCell, AddNewLedgerRecord, Money, LocalizedDate, Loader, Error, NoContent } from 'ui';
 import { Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useSnackbar } from 'notistack';
+import { MESSAGES } from 'consts/Notification.messages';
 
 export const LedgerWidget = () => {
   const [openModalType, setOpenModalType] = useState(null);
@@ -17,12 +19,24 @@ export const LedgerWidget = () => {
     queryFn: () => LedgerService.findAll()
   });
 
+  const { enqueueSnackbar } = useSnackbar();
+  
+  const showNotification = (message, variant) => {
+    enqueueSnackbar(message, {variant});
+  };
+
   const deleteMutation = useMutation({
     mutationFn: (selectedRows) => {
       return LedgerService.remove({ ids: selectedRows })
     }, 
     onSuccess: async () => {
-      await queryClient.invalidateQueries([LEDGER_QUERY])
+      await queryClient.invalidateQueries([LEDGER_QUERY]);
+      await queryClient.invalidateQueries([BUDGET_QUERY]);
+      await queryClient.invalidateQueries([SUMMARY_QUERY]);
+      showNotification(MESSAGES.SUCCESS.REMOVE_RECORD, 'success');
+    },
+    onError: () => {
+      showNotification(MESSAGES.ERROR, 'error');
     }});
 
   const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);
@@ -89,13 +103,14 @@ export const LedgerWidget = () => {
               deleteRecords={deleteRecords}
             />
           )}
+          <AddNewLedgerRecord 
+            type={openModalType} 
+            onClose={() => setOpenModalType(null)} 
+            open={!!openModalType}
+            showNotification={showNotification} 
+          />
           </Grid>
         </Grid>
-
-        <AddNewLedgerRecord type={openModalType} 
-                            onClose={() => setOpenModalType(null)} 
-                            open={!!openModalType} />
-
       </Card>
   );
 };

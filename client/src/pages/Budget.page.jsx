@@ -1,47 +1,17 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { BudgetService } from '../api/services/BudgetService';
-import { BUDGET_QUERY } from 'queryKeys';
-import { ActionHeader, Card, Page, Table, Loader, Error, NoContent, Money, LocalizedDate, CategoryCell, Button } from 'ui';
+import { ActionHeader, Button, Card, Page, BudgetWidget, AddNewBudgetRecord } from 'ui';
 import { Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { AddNewBudgetRecord } from '../ui/organisms/AddNewBudgetRecord.modal';
+import { useSnackbar } from 'notistack';
 
 export const BudgetPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const queryClient = useQueryClient();
-
-  const { isLoading, isError, data, error} = useQuery({
-    queryKey: [BUDGET_QUERY],
-    queryFn: () => BudgetService.findAll(),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (selectedRows) => {
-      return BudgetService.remove({ ids: selectedRows })
-    }, 
-    onSuccess: async () => {
-      await queryClient.invalidateQueries([BUDGET_QUERY])
-    }});
-
-  const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);
-
-  const headCells = [
-    {id: '1', label: 'Nazwa', renderCell: (row) => <CategoryCell name={row.category.name} color={row.category.color} />},
-    {id: '2', label: 'Planowane wydatki', renderCell: (row) => <Money inCents={row.amountInCents} />},
-    {id: '3', label: 'Obecna kwota', renderCell: (row) => <Money inCents={row.currentSpending} />},
-    {id: '4', label: 'Status', renderCell: (row) => {
-      if (row.currentSpending === row.amountInCents) {
-        return 'Wykorzystany'
-      } else if (row.currentSpending > row.amountInCents) {
-        return 'Przekroczone'
-      } else {
-        return 'W normie'
-      }
-    }},
-    {id: '5', label: 'Data utworzenia', renderCell: (row) => <LocalizedDate date={row.createdAt} />},
-  ];
+  const { enqueueSnackbar } = useSnackbar();
+  
+  const showNotification = (message, variant) => {
+    enqueueSnackbar(message, {variant});
+  };
 
   return (
     <Page title="Budżet">
@@ -65,26 +35,15 @@ export const BudgetPage = () => {
       >
         <Grid container>
           <Grid item xs={12}>
-           {isLoading ? (
-              <Loader/>
-            ) : isError ? (
-              <Error error={error}/>
-            ) : data && data.length > 0 ? (
-              <Table
-                headCells={headCells}
-                rows={data}
-                getUniqueId={(row) => row.id}
-                deleteRecords={deleteRecords}
-              />
-            ) : (
-              <NoContent/>
-            )}
+            <BudgetWidget 
+              showNotification={showNotification} />
+            <AddNewBudgetRecord 
+              onClose={() => setIsModalOpen(false)}
+              open={isModalOpen}
+              showNotification={showNotification} 
+            />
           </Grid>
         </Grid>
-
-        <AddNewBudgetRecord onClose={() => setIsModalOpen(false)}
-                            open={isModalOpen}/>
-
       </Card>
     </Page>
   );
