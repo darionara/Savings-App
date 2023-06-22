@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { CategoryService, BudgetService } from 'api';
-import { NOT_SELECTED_CATEGORIES_QUERY, BUDGET_QUERY } from 'queryKeys';
+import { NOT_SELECTED_CATEGORIES_QUERY, BUDGET_QUERY, SUMMARY_QUERY } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
 import { Modal, CategorySelect, AmountFormField, Loader, Error, NoContent } from 'ui';
 import { formatDollarsToCents } from 'utils';
+import { MESSAGES } from 'consts/Notification.messages';
 
-export const AddNewBudgetRecord = ({ onClose, open}) => {
+export const AddNewBudgetRecord = ({ onClose, open, showNotification }) => {
   const queryClient = useQueryClient();
 
   const { isLoading, error, data: categories } = useQuery({
@@ -22,8 +23,13 @@ export const AddNewBudgetRecord = ({ onClose, open}) => {
     onSuccess: async () => {
       await queryClient.invalidateQueries([BUDGET_QUERY]);
       await queryClient.invalidateQueries([NOT_SELECTED_CATEGORIES_QUERY]);
+      await queryClient.invalidateQueries([SUMMARY_QUERY]);
       onClose();
       reset();
+      showNotification(MESSAGES.SUCCESS.ADD_BUDGET, 'success');
+    },
+    onError: () => {
+      showNotification(MESSAGES.ERROR, 'error')
     }
   });
 
@@ -94,5 +100,6 @@ export const AddNewBudgetRecord = ({ onClose, open}) => {
 
 AddNewBudgetRecord.propTypes = {
   open: PropTypes.bool,
-  onclose: PropTypes.func
+  onclose: PropTypes.func,
+  showNotification: PropTypes.func
 }
