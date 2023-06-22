@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { BudgetService } from 'api';
-import { BUDGET_QUERY, SUMMARY_QUERY } from 'queryKeys';
+import { BUDGET_QUERY, SUMMARY_QUERY, NOT_SELECTED_CATEGORIES_QUERY } from 'queryKeys';
 import { Table, Loader, Error, NoContent, Money, LocalizedDate, CategoryCell } from 'ui';
 import { MESSAGES } from 'consts/Notification.messages';
 
@@ -19,6 +19,7 @@ export const BudgetWidget = ({ showNotification }) => {
     }, 
     onSuccess: async () => {
       await queryClient.invalidateQueries([BUDGET_QUERY]);
+      await queryClient.invalidateQueries([NOT_SELECTED_CATEGORIES_QUERY]);
       await queryClient.invalidateQueries([SUMMARY_QUERY]);
       showNotification(MESSAGES.SUCCESS.REMOVE_RECORD, 'success')
     },
