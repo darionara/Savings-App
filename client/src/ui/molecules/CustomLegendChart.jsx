@@ -9,10 +9,10 @@ export const CustomLegend = ({ labels }) => {
           <span
             style={{
               display: 'inline-block',
-              width: '1rem',
-              height: '1rem',
+              width: '16px',
+              height: '16px',
               borderRadius: '50%',
-              marginRight: '1rem',
+              marginRight: '16px',
               backgroundColor: item.color,
             }}
           />
