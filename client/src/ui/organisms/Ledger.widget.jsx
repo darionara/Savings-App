@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { LedgerService } from 'api';
 import { LEDGER_QUERY, SUMMARY_QUERY, BUDGET_QUERY } from 'queryKeys';
@@ -11,13 +11,30 @@ import { MESSAGES } from 'consts/Notification.messages';
 
 export const LedgerWidget = () => {
   const [openModalType, setOpenModalType] = useState(null);
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
+  const limit = perPage;
+  const offset = page * perPage;
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePerPageChange = (event) => {
+    setPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  
   const queryClient = useQueryClient();
 
-  const { isLoading, data, error} = useQuery({
+  const { isLoading, data, error, refetch } = useQuery({
     queryKey: [LEDGER_QUERY],
-    queryFn: () => LedgerService.findAll()
+    queryFn: () => LedgerService.findAll(limit, offset),
   });
+
+  useEffect(() => {
+     refetch();
+  }, [limit, offset, refetch])
 
   const { enqueueSnackbar } = useSnackbar();
   
@@ -101,6 +118,10 @@ export const LedgerWidget = () => {
               rows={data}
               getUniqueId={(row) => row.id}
               deleteRecords={deleteRecords}
+              page={page}
+              perPage={perPage}
+              onPageChange={handlePageChange}
+              onPerPageChange={handlePerPageChange}
             />
           )}
           <AddNewLedgerRecord 

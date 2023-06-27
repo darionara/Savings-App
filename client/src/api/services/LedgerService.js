@@ -18,10 +18,10 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findAll() {
+  static findAll(limit, offset) {
     return request({
       method: 'GET',
-      path: `/ledger`,
+      path: `/ledger?limit=${limit}&offset=${offset}`,
     });
   }
 
