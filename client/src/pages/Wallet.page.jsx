@@ -9,11 +9,11 @@ export const WalletPage = () => {
         <Grid item xs={12} md={8}>
           <LedgerWidget />
         </Grid>
-        <Grid container item xs={12} md={4} spacing={3} style={{display: "block"}}>
-          <Grid item xs={12} data-test-id={'wallet-top-sidebar'} sx={{height: "fit-content"}}>
+        <Grid container item xs={12} md={4} spacing={3} style={{display: 'block'}}>
+          <Grid item xs={12} data-test-id={'wallet-top-sidebar'} sx={{height: 'fit-content'}}>
             <BalanceChart />
           </Grid>
-          <Grid item xs={12} data-test-id={'wallet-bottom-sidebar'} sx={{height: "fit-content"}}>
+          <Grid item xs={12} data-test-id={'wallet-bottom-sidebar'} sx={{height: 'fit-content'}}>
             <BudgetChart />
           </Grid>
         </Grid>

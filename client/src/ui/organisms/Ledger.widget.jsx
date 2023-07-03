@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { LedgerService } from 'api';
 import { LEDGER_QUERY, SUMMARY_QUERY, BUDGET_QUERY } from 'queryKeys';
@@ -12,9 +12,11 @@ import { MESSAGES } from 'consts/Notification.messages';
 export const LedgerWidget = () => {
   const [openModalType, setOpenModalType] = useState(null);
   const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(20);
-  const limit = perPage;
-  const offset = page * perPage;
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
+  
+  // The 'total' metadata is not included in the backend, so I fetched all the data and got the length of the array to get the total amount of rows
+  LedgerService.findAll().then((data) => setTotalRows(data.length));
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -27,14 +29,10 @@ export const LedgerWidget = () => {
   
   const queryClient = useQueryClient();
 
-  const { isLoading, data, error, refetch } = useQuery({
-    queryKey: [LEDGER_QUERY],
-    queryFn: () => LedgerService.findAll(limit, offset),
+  const { isLoading, data, error } = useQuery({
+    queryKey: [LEDGER_QUERY, page, perPage],
+    queryFn: () => LedgerService.findAll({limit: perPage, offset: page * perPage}),
   });
-
-  useEffect(() => {
-     refetch();
-  }, [limit, offset, refetch])
 
   const { enqueueSnackbar } = useSnackbar();
   
@@ -116,6 +114,7 @@ export const LedgerWidget = () => {
             <Table
               headCells={headCells}
               rows={data}
+              totalRows={totalRows}
               getUniqueId={(row) => row.id}
               deleteRecords={deleteRecords}
               page={page}

@@ -57,8 +57,6 @@ export const BudgetWidget = ({ showNotification }) => {
     {id: '5', label: 'Data utworzenia', renderCell: (row) => <LocalizedDate date={row.createdAt} />},
   ];
 
-  
-
   if (isLoading) {
     return <Loader />;
   }
@@ -75,6 +73,7 @@ export const BudgetWidget = ({ showNotification }) => {
     <Table
       headCells={headCells}
       rows={data}
+      totalRows={data.length}
       getUniqueId={(row) => row.id}
       deleteRecords={deleteRecords}
       page={page}

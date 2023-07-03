@@ -11,7 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
-export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPage, onPageChange, onPerPageChange }) => {
+export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPage, onPageChange, onPerPageChange, totalRows }) => {
   const [selected, setSelected] = React.useState([]);
 
   const handleSelectAllClick = (event) => {
@@ -90,15 +90,9 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
               <TablePagination
                 rowsPerPageOptions={[5, 10, 20, 50]}
                 colSpan={6}
-                count={rows.length}
+                count={totalRows}
                 rowsPerPage={perPage}
                 page={page}
-                SelectProps={{
-                  inputProps: {
-                    'aria-label': 'rows per page',
-                  },
-                  native: true,
-                }}
                 onPageChange={onPageChange}
                 onRowsPerPageChange={onPerPageChange}
                 showFirstButton={true}
