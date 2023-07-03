@@ -2,14 +2,16 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import MuiTable from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses} from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+import TableFooter from '@mui/material/TableFooter';
+import TablePagination from '@mui/material/TablePagination';
 import Checkbox from '@mui/material/Checkbox';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
-export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
+export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPage, onPageChange, onPerPageChange, totalRows }) => {
   const [selected, setSelected] = React.useState([]);
 
   const handleSelectAllClick = (event) => {
@@ -41,8 +43,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
             headCells={headCells}
           />
           <TableBody>
-            {rows
-              .slice()
+            {(perPage > 0 ? rows.slice(page * perPage, page * perPage + perPage) : rows)
               .map((row, index) => {
                 const uniqueId = getUniqueId(row);
                 const isItemSelected = selected.includes(uniqueId);
@@ -80,6 +81,25 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
                 );
               })}
           </TableBody>
+          <TableFooter>
+            <TableRow sx={{
+              [`& .${tableCellClasses.root}`]: {
+                borderBottom: 'none'
+              }}}
+              >
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 20, 50]}
+                colSpan={6}
+                count={totalRows}
+                rowsPerPage={perPage}
+                page={page}
+                onPageChange={onPageChange}
+                onRowsPerPageChange={onPerPageChange}
+                showFirstButton={true}
+                showLastButton={true}
+              />
+            </TableRow>
+          </TableFooter>
         </MuiTable>
       </TableContainer>
     </Box>

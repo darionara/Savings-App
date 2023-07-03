@@ -11,12 +11,27 @@ import { MESSAGES } from 'consts/Notification.messages';
 
 export const LedgerWidget = () => {
   const [openModalType, setOpenModalType] = useState(null);
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
+  
+  // The 'total' metadata is not included in the backend, so I fetched all the data and got the length of the array to get the total amount of rows
+  LedgerService.findAll().then((data) => setTotalRows(data.length));
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePerPageChange = (event) => {
+    setPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  
   const queryClient = useQueryClient();
 
-  const { isLoading, data, error} = useQuery({
-    queryKey: [LEDGER_QUERY],
-    queryFn: () => LedgerService.findAll()
+  const { isLoading, data, error } = useQuery({
+    queryKey: [LEDGER_QUERY, page, perPage],
+    queryFn: () => LedgerService.findAll({limit: perPage, offset: page * perPage}),
   });
 
   const { enqueueSnackbar } = useSnackbar();
@@ -99,8 +114,13 @@ export const LedgerWidget = () => {
             <Table
               headCells={headCells}
               rows={data}
+              totalRows={totalRows}
               getUniqueId={(row) => row.id}
               deleteRecords={deleteRecords}
+              page={page}
+              perPage={perPage}
+              onPageChange={handlePageChange}
+              onPerPageChange={handlePerPageChange}
             />
           )}
           <AddNewLedgerRecord 
