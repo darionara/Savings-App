@@ -23,7 +23,7 @@ export class LedgerService {
     return request({
       method: 'GET',
       path: `/ledger`,
-      params: {limit, offset}
+      query: {limit, offset}
     });
   }
 

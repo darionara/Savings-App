@@ -43,8 +43,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
             headCells={headCells}
           />
           <TableBody>
-            {(perPage > 0 ? rows.slice(page * perPage, page * perPage + perPage) : rows)
-              .map((row, index) => {
+            {rows.map((row, index) => {
                 const uniqueId = getUniqueId(row);
                 const isItemSelected = selected.includes(uniqueId);
                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -97,6 +96,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
                 onRowsPerPageChange={onPerPageChange}
                 showFirstButton={true}
                 showLastButton={true}
+                data-test='table-pagination'
               />
             </TableRow>
           </TableFooter>
