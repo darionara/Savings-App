@@ -23,5 +23,22 @@ module.exports = (on) => {
       const { data } = await axios.post(`http://localhost:4320/tests/setup`);
       return data;
     },
+
+    'db:remove': async (amountOfRecords) => {
+      const ids = Array.from({ length: amountOfRecords }, (_, index) => (index + 1).toString());
+      const { data } = await axios.delete(`http://localhost:4320/ledger`, { data: { ids } });
+      return data;
+    },
+
+/*     'db:add': async (amountOfRecords) => {
+      const records = Array.from({ length: amountOfRecords }, () => ({
+        mode: 'INCOME',
+        amountInCents: 0,
+        categoryId: 'string',
+        title: 'string'
+      }));
+      const { data } = await axios.post(`http://localhost:4320/ledger`, records);
+      return data;
+    } */
   });
 };
