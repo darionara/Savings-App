@@ -13,10 +13,6 @@ export const LedgerWidget = () => {
   const [openModalType, setOpenModalType] = useState(null);
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(10);
-  const [totalRows, setTotalRows] = useState(0);
-  
-  // The 'total' metadata is not included in the backend, so I fetched all the data and got the length of the array to get the total amount of rows
-  LedgerService.findAll().then((data) => setTotalRows(data.length));
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -29,9 +25,17 @@ export const LedgerWidget = () => {
   
   const queryClient = useQueryClient();
 
+  // The 'total' metadata is not included in the backend, so I fetched all the data and got the length of the array to get the total amount of rows
+  const { data: totalLedgers } = useQuery({
+    queryKey: [LEDGER_QUERY],
+    queryFn: () => LedgerService.findAll(),
+  });
+
+  const totalRows = totalLedgers?.length ?? 0;
+
   const { isLoading, data, error } = useQuery({
     queryKey: [LEDGER_QUERY, page, perPage],
-    queryFn: () => LedgerService.findAll({limit: perPage, offset: page * perPage}),
+    queryFn: () => LedgerService.findAll(perPage, page * perPage),
   });
 
   const { enqueueSnackbar } = useSnackbar();
@@ -75,6 +79,8 @@ export const LedgerWidget = () => {
       )}},
     }
   ];
+
+  console.log(data);
 
   return (
     <Card

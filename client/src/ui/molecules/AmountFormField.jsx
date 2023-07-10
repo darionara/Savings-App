@@ -12,7 +12,7 @@ export const AmountFormField = ({ control, errors, lessThan }) => {
         required: 'Kwota nie może być pusta',
         validate: {
           greaterThanZero: value => value > 0 || 'Kwota musi być większa niż 0',
-          lessThanMillion: value => value < lessThan || `Kwota nie może być większa niż ${lessThan}`
+          lessThanMillion: value => value <= lessThan || `Kwota nie może być większa niż ${lessThan}`
         }
       }}
       render={({ field }) => (
