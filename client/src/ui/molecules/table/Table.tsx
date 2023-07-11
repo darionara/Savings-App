@@ -11,23 +11,61 @@ import Checkbox from '@mui/material/Checkbox';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
-export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPage, onPageChange, onPerPageChange, totalRows }) => {
-  const [selected, setSelected] = React.useState([]);
+interface Category {
+  id: string;
+  name: string;
+  color: string;
+  budgetId: string | null;
+  ledgerIds: string[];
+  createdAt: number;
+}
 
-  const handleSelectAllClick = (event) => {
-    setSelected(event.target.checked ? rows.map((n) => getUniqueId(n)) : []);
+interface Row {
+  id: string;
+  categoryId: string | null;
+  createdAt: number;
+  title: string;
+  mode: 'INCOME' | 'EXPENSE';
+  amountInCents: number;
+  category: Category;
+}
+
+interface HeadCell {
+  id: string;
+  label: string;
+  renderCell: (row: Row) => React.ReactNode;
+}
+
+interface TableProps {
+  headCells: HeadCell[];
+  rows: Row[];
+  getUniqueId: (row: Row) => string;
+  deleteRecords: (selectedRows: Row[]) => void;
+  page: number;
+  perPage: number;
+  onPageChange: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
+  onPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  totalRows: number;
+}
+
+export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPage, onPageChange, onPerPageChange, totalRows }: TableProps) => {
+  const [selected, setSelected] = React.useState<string[]>([]);
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelected(event.target.checked ? rows.map((n: Row) => getUniqueId(n)) : []);   
   };
 
-  const handleClick = (event, id) => {
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {   
     setSelected(
       selected.includes(id)
-        ? selected.filter((selectedId) => selectedId !== id)
+        ? selected.filter((selectedId: string) => selectedId !== id)
         : [...selected, id],
     );
   };
 
   const onDelete = () => {
-    deleteRecords(selected);
+    const selectedRows = selected.map((id) => rows.find((row) => getUniqueId(row) === id)).filter(Boolean) as Row[];
+    deleteRecords(selectedRows);
     setSelected([]);
   };
 
@@ -53,7 +91,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
                     hover
                     role="checkbox"
                     key={uniqueId}
-                    onClick={(event) => handleClick(event, uniqueId)}
+                    onClick={(event: React.MouseEvent<unknown>) => handleClick(event, uniqueId)}
                     aria-checked={isItemSelected}
                     tabIndex={-1}
                     selected={isItemSelected}

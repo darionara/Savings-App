@@ -5,7 +5,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static create({ requestBody }) {
+  static create({ requestBody }: { requestBody: any}) {
     return request({
       method: 'POST',
       path: `/ledger`,
@@ -19,7 +19,7 @@ export class LedgerService {
    * @throws ApiError
    */
   //`/ledger?limit=${limit}&offset=${offset}`
-  static findAll(limit, offset) {
+  static findAll(limit: number, offset: number) {
     return request({
       method: 'GET',
       path: `/ledger`,
@@ -31,7 +31,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findOne({ id }) {
+  static findOne({ id }: { id: string }) {
     return request({
       method: 'GET',
       path: `/ledger/${id}`,
@@ -42,7 +42,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static update({ id, requestBody }) {
+  static update({ id, requestBody }: { id: string; requestBody: any }) {
     return request({
       method: 'PATCH',
       path: `/ledger/${id}`,
@@ -55,7 +55,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static remove({ ids }) {
+  static remove({ ids }: { ids: string[] }) {
     return ids.length === 1
       ? request({
           method: 'DELETE',
@@ -68,3 +68,4 @@ export class LedgerService {
         });
   }
 }
+
