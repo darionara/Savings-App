@@ -11,16 +11,16 @@ import Checkbox from '@mui/material/Checkbox';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
-interface Category {
+export interface Category {
   id: string;
   name: string;
   color: string;
-  budgetId: string | null;
-  ledgerIds: string[];
-  createdAt: number;
+  budgetId?: string | null;
+  ledgerIds?: string | string[];
+  createdAt?: number;
 }
 
-interface Row {
+export interface Row {
   id: string;
   categoryId: string | null;
   createdAt: number;
@@ -30,10 +30,10 @@ interface Row {
   category: Category;
 }
 
-interface HeadCell {
+export interface HeadCell {
   id: string;
   label: string;
-  renderCell: (row: Row) => React.ReactNode;
+  renderCell: (row: Row) => React.ReactNode | string;
 }
 
 interface TableProps {
@@ -55,7 +55,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
     setSelected(event.target.checked ? rows.map((n: Row) => getUniqueId(n)) : []);   
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {   
+  const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {   
     setSelected(
       selected.includes(id)
         ? selected.filter((selectedId: string) => selectedId !== id)
@@ -91,7 +91,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
                     hover
                     role="checkbox"
                     key={uniqueId}
-                    onClick={(event: React.MouseEvent<unknown>) => handleClick(event, uniqueId)}
+                    onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, uniqueId)}
                     aria-checked={isItemSelected}
                     tabIndex={-1}
                     selected={isItemSelected}

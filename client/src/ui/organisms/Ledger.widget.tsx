@@ -8,36 +8,18 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useSnackbar } from 'notistack';
 import { MESSAGES } from 'consts/Notification.messages';
-
-interface Category {
-  id: string;
-  name: string;
-  color: string;
-  budgetId: string | null;
-  ledgerIds: string[];
-  createdAt: number;
-}
-
-interface Row {
-  id: string;
-  categoryId: string | null;
-  createdAt: number;
-  title: string;
-  mode: 'INCOME' | 'EXPENSE';
-  amountInCents: number;
-  category: Category;
-}
+import { Row, HeadCell } from '../molecules/table/Table';
 
 export const LedgerWidget = () => {
-  const [openModalType, setOpenModalType] = useState<string | null>(null);
+  const [openModalType, setOpenModalType] = useState<'INCOME' | 'EXPENSE' | null>(null);
   const [page, setPage] = useState<number>(0);
   const [perPage, setPerPage] = useState<number>(10);
 
-  const handlePageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+  const handlePageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number): void => {
     setPage(newPage);
   };
 
-  const handlePerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePerPageChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -79,7 +61,7 @@ export const LedgerWidget = () => {
 
   const deleteRecords = (selectedRows: string[]) => deleteMutation.mutate(selectedRows);
 
-  const headCells = [
+  const headCells: HeadCell[] = [
     {id: '1', label: 'Nazwa', renderCell: (row: Row) => row.title},
     {id: '2', label: 'Kategoria', renderCell: (row: Row) => <CategoryCell name={row.category.name} color={row.category.color} />},
     {id: '5', label: 'Data', renderCell: (row: Row) => <LocalizedDate date={row.createdAt} />},
@@ -99,8 +81,6 @@ export const LedgerWidget = () => {
     }
   ];
 
-  console.log(data);
-
   return (
     <Card
       subheader=''
@@ -108,12 +88,12 @@ export const LedgerWidget = () => {
         <ActionHeader
           variant={'h1'}
           title="Portfel"
-          renderActions={() => (
+          renderActions={(): JSX.Element => (
             <Box>
               <Button
                 color='primary'
                 variant='outlined'
-                startIcon={<AddIcon/>}
+                startIcon={<AddIcon />}
                 onClick={() => setOpenModalType('INCOME')}
               >
                 Wpłać
@@ -143,7 +123,7 @@ export const LedgerWidget = () => {
               headCells={headCells}
               rows={data}
               totalRows={totalRows}
-              getUniqueId={(row: Row) => row.id}
+              getUniqueId={(row: Row): string => row.id}
               deleteRecords={deleteRecords}
               page={page}
               perPage={perPage}
