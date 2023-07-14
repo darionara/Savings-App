@@ -3,22 +3,23 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { LedgerService } from 'api';
 import { LEDGER_QUERY, SUMMARY_QUERY, BUDGET_QUERY } from 'queryKeys';
 import { ActionHeader, Card, Button, Table, CategoryCell, AddNewLedgerRecord, Money, LocalizedDate, Loader, Error, NoContent } from 'ui';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useSnackbar } from 'notistack';
 import { MESSAGES } from 'consts/Notification.messages';
+import { Row, HeadCell } from '../molecules/table/Table';
 
 export const LedgerWidget = () => {
-  const [openModalType, setOpenModalType] = useState(null);
-  const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(10);
+  const [openModalType, setOpenModalType] = useState<'INCOME' | 'EXPENSE' | null>(null);
+  const [page, setPage] = useState<number>(0);
+  const [perPage, setPerPage] = useState<number>(10);
 
-  const handlePageChange = (event, newPage) => {
+  const handlePageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number): void => {
     setPage(newPage);
   };
 
-  const handlePerPageChange = (event) => {
+  const handlePerPageChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -26,26 +27,26 @@ export const LedgerWidget = () => {
   const queryClient = useQueryClient();
 
   // The 'total' metadata is not included in the backend, so I fetched all the data and got the length of the array to get the total amount of rows
-  const { data: totalLedgers } = useQuery({
+  const { data: totalLedgers } = useQuery<Row[]>({
     queryKey: [LEDGER_QUERY],
     queryFn: () => LedgerService.findAll(),
   });
 
   const totalRows = totalLedgers?.length ?? 0;
 
-  const { isLoading, data, error } = useQuery({
+  const { isLoading, data, error } = useQuery<Row[]>({
     queryKey: [LEDGER_QUERY, page, perPage],
     queryFn: () => LedgerService.findAll(perPage, page * perPage),
   });
 
   const { enqueueSnackbar } = useSnackbar();
   
-  const showNotification = (message, variant) => {
+  const showNotification = (message: string, variant: 'success' | 'error') => {
     enqueueSnackbar(message, {variant});
   };
 
   const deleteMutation = useMutation({
-    mutationFn: (selectedRows) => {
+    mutationFn: (selectedRows: string[]) => {
       return LedgerService.remove({ ids: selectedRows })
     }, 
     onSuccess: async () => {
@@ -58,42 +59,41 @@ export const LedgerWidget = () => {
       showNotification(MESSAGES.ERROR, 'error');
     }});
 
-  const deleteRecords = (selectedRows) => deleteMutation.mutate(selectedRows);
+  const deleteRecords = (selectedRows: string[]) => deleteMutation.mutate(selectedRows);
 
-  const headCells = [
-    {id: '1', label: 'Nazwa', renderCell: (row) => row.title},
-    {id: '2', label: 'Kategoria', renderCell: (row) => <CategoryCell name={row.category.name} color={row.category.color} />},
-    {id: '5', label: 'Data', renderCell: (row) => <LocalizedDate date={row.createdAt} />},
-    {id: '4', label: 'Kwota', renderCell: (row) => {
+  const headCells: HeadCell[] = [
+    {id: '1', label: 'Nazwa', renderCell: (row: Row) => row.title},
+    {id: '2', label: 'Kategoria', renderCell: (row: Row) => <CategoryCell name={row.category.name} color={row.category.color} />},
+    {id: '5', label: 'Data', renderCell: (row: Row) => <LocalizedDate date={row.createdAt} />},
+    {id: '4', label: 'Kwota', renderCell: (row: Row) => {
       if (row.mode === 'INCOME') {
         return (
-          <Typography color={'success.main'} variant={'p'}> 
+          <Typography color={'success.main'} variant={'body2'}> 
             + <Money inCents={row.amountInCents} />
           </Typography>
       )}
       if (row.mode === 'EXPENSE') {
         return (
-          <Typography color={'error.main'} variant={'p'}> 
+          <Typography color={'error.main'} variant={'body2'}> 
             - <Money inCents={row.amountInCents} />
           </Typography>
       )}},
     }
   ];
 
-  console.log(data);
-
   return (
     <Card
+      subheader=''
       title={
         <ActionHeader
           variant={'h1'}
           title="Portfel"
-          renderActions={() => (
-            <div>
+          renderActions={(): JSX.Element => (
+            <Box>
               <Button
                 color='primary'
                 variant='outlined'
-                startIcon={<AddIcon/>}
+                startIcon={<AddIcon />}
                 onClick={() => setOpenModalType('INCOME')}
               >
                 Wpłać
@@ -106,22 +106,24 @@ export const LedgerWidget = () => {
               >
                 Wypłać
               </Button>
-            </div>
+            </Box>
           )}
         />
       }
     >
       <Grid container>
         <Grid item xs={12}>
+          <>
           {isLoading && <Loader />}
           {error && <Error error={error} />}
           {!isLoading && !error && !data?.length && <NoContent />}
+          </>
           {!isLoading && !error && !!data?.length && (
             <Table
               headCells={headCells}
               rows={data}
               totalRows={totalRows}
-              getUniqueId={(row) => row.id}
+              getUniqueId={(row: Row): string => row.id}
               deleteRecords={deleteRecords}
               page={page}
               perPage={perPage}

@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 export const ActionHeader = ({
   title,
   variant,
-  renderActions = () => null,
+  renderActions = () => <></>/* null */,
 }) => {
   return (
     <Box
