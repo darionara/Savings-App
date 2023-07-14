@@ -40,7 +40,7 @@ interface TableProps {
   headCells: HeadCell[];
   rows: Row[];
   getUniqueId: (row: Row) => string;
-  deleteRecords: (selectedRows: Row[]) => void;
+  deleteRecords: (selectedRows: string[]) => void;
   page: number;
   perPage: number;
   onPageChange: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
@@ -64,8 +64,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
   };
 
   const onDelete = () => {
-    const selectedRows = selected.map((id) => rows.find((row) => getUniqueId(row) === id)).filter(Boolean) as Row[];
-    deleteRecords(selectedRows);
+    deleteRecords(selected);
     setSelected([]);
   };
 

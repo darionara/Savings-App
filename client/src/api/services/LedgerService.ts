@@ -61,7 +61,7 @@ export class LedgerService {
    * @throws ApiError
    */
   //`/ledger?limit=${limit}&offset=${offset}`
-  static findAll(limit: number, offset: number): Promise<ResponseBody[]> {
+  static findAll(limit?: number, offset?: number): Promise<ResponseBody[]> {
     return request({
       method: 'GET',
       path: `/ledger`,
