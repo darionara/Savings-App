@@ -29,6 +29,7 @@ export const BalanceChart = () => {
 
   const options = {
     responsive: false,
+    devicePixelRatio: 4,
     plugins: {
       legend: {
         display: false,
@@ -44,17 +45,19 @@ export const BalanceChart = () => {
             title={
               <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
                 <Typography variant={'h4'}>Saldo</Typography>
-                <Typography variant={'h4'}>{formatCentsToDollars(data.balance)} PLN</Typography>
+                <Typography variant={'h3'}>{formatCentsToDollars(data.balance)} PLN</Typography>
               </Box>
             }
             subheader='Pozostała kwota'
             sx={{mb: 5}}
           />
           <CardContent sx={{paddingBottom: 0}}>
-            <Doughnut data={summary} options={options} sx={{margin: '0 auto', width: '100%'}} />
+            <div style={{margin: '0 auto'}}>
+              <Doughnut data={summary} options={options} style={{width: '100%', height: '100%'}}/>
+            </div>
             <CustomLegend 
               labels={data?.spending.map((spending) => 
-              ({ name: spending.categoryName, color: spending.categoryColor, id: spending.categoryId}))} />
+              ({ name: spending.categoryName, color: spending.categoryColor, id: spending.categoryId }))} />
           </CardContent>
         </>
       ) : (

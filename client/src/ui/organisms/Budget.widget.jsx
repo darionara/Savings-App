@@ -57,7 +57,7 @@ export const BudgetWidget = ({ showNotification }) => {
     {id: '5', label: 'Data utworzenia', renderCell: (row) => <LocalizedDate date={row.createdAt} />},
   ];
 
-  const rowsPerPage = perPage > 0 ? data.slice(page * perPage, page * perPage + perPage) : data;
+  const rowsPerPage = perPage > 0 ? data?.slice(page * perPage, page * perPage + perPage) : data;
 
   if (isLoading) {
     return <Loader />;

@@ -169,6 +169,18 @@ theme = createTheme(theme, {
         }
       }
     },
+    MuiGrid: {
+      styleOverrides: {
+        root: {
+          '&.wallet-sidebar': {
+            paddingLeft: '0px',
+            '@media (max-width: 899px)': {
+              paddingLeft: '24px',
+            }
+          },
+        }
+      }
+    },
   },
 });
 

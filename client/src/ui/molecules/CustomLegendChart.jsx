@@ -12,11 +12,10 @@ export const CustomLegend = ({ labels }) => {
               width: '16px',
               height: '16px',
               borderRadius: '50%',
-              marginRight: '16px',
               backgroundColor: item.color,
             }}
           />
-          <Typography variant="p">{item.name}</Typography>
+          <Typography variant="p" style={{width: 'calc(100% - 32px)', marginLeft: '16px'}}>{item.name}</Typography>
         </Box>
       ))}
     </Box>

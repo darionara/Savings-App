@@ -26,6 +26,7 @@
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@storybook/addon-actions": "^6.4.12",
     "@storybook/addon-essentials": "^6.4.12",
     "@storybook/addon-links": "^6.4.12",
