@@ -1,95 +1,92 @@
-# Opis
-To repozytorium zawierające kod do Wyzwania React Dare IT.
-Informajce na temat zadań oraz tego jak rozpocząć pracę nad nimi będziesz otrzymywać mailowo.
+# About the project
+The project was created as a part of the React Challenge v2 conducted by Dare IT - an organization supporting women to start career in the IT industry :cherry_blossom:
 
-# Pierwsze kroki
+Saving App is an application enabling users to control their home budgets. It provides inputs for by adding incomes and spendings on their daily basis and visualize the balance between them, using charts.
 
-## 🧰 Instalacja pakietów NPM
+The goal of the challenge was to create a react app using some popular libraries, workshops, design and testing tools and communicate with the server using REST API.
 
-znajdując się w katalogu głównym repozytorium react-challenge, uruchom terminal a następnie wywołaj następującą komendę
+<img src='client/public/ledger_img.png' >
 
-    npm i
-
-
-✨ Terminal powinien wyglądać mniej więcej tak ✨
-
-![Matrix terminal image](https://w0tt.files.wordpress.com/2011/06/matrix.gif?w=613&zoom=2)
-
-
-a tak naprawdę tak 
-
-```
- adrianaolszak@Admins-MacBook-Pro > ~/WebstormProjects/non-work/dareit/react-challenge > npm i
-
-> challenge@1.0.0 postinstall /Users/adrianaolszak/WebstormProjects/non-work/dareit/challenge
-> run-p -l install:server install:client
-
-[install:client] 
-[install:client] > challenge@1.0.0 install:client /Users/adrianaolszak/WebstormProjects/non-work/dareit/challenge
-[install:client] > cd client && npm install
-[install:client] 
-[install:server] 
-[install:server] > challenge@1.0.0 install:server /Users/adrianaolszak/WebstormProjects/non-work/dareit/challenge
-[install:server] > cd server && npm install
-[install:server] 
-
-```
-⏳ instalacja może zająć trochę czasu ⏳
-
-Zwróć uwagę na `[install:client]` oraz `[install:server]`, jednocześnie przebiega instalacja dla dwóch aplikacji - client, to tam będą wykonywane zadania oraz server, który będzie zasilał apkę front-endową danymi.
-
-Jeżeli wszystko ukończyło się pomyślnie process w terminalu się zakończy.
-
-Jeżeli coś będzie nie tak konsola na pewno poinformuje Cię o tym dużym błędem ;)
-
-## 🏃 Uruchomienie aplikacji
-
-### 🔗 Client i Server zawsze razem
-
-Repozytorium jest skonstruowane w taki sposób aby aplikacja client oraz aplikacja server były uruchamiane jednocześnie. Jest to wymagane ponieważ jedno bez drugiego nie bedzie prawidłowo funkcjonować.
-
-🔵 Pamiętaj aby zainstalować pakiety npm! Opisane w poprzednim kroku
-
-Znajdująć się w katalogu głównym Twojego repozytorium uruchom terminal i wykonaj polecenie:
-
-     npm run start
+## Built with
+[![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)][React-url]
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+[![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)][React-Query-url]
+[![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)][React-Router-url]
+[![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=for-the-badge&logo=reacthookform&logoColor=white)][React-Hook-Form-url]
+[![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)][MUI-url]
+[![Storybook](https://img.shields.io/badge/-Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)][Storybook-url]
+[![Chart.js](https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white)][ChartJS-url]
+[![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e)][Cypress-url]
+[![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)][Swagger-url]
+[![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)][VSC-url]
+[![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)][Figma-url]
+[![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)][Git-url]
 
 
-Komenda ta uruchomi 2 aplikacje które będą dostępne pod następującymi adresami:
-- client - aplikacja reactowa - http://localhost:3000
-- server - aplikacja backendowa - http://localhost:4320
-    - dokumentacja API jest dostępna pod adresem http://localhost:4320/swagger
+# Getting started
+
+## Installation of npm packages
+
+From the root of the react-challenge repository, launch a terminal and then run the following command
+
+        npm i
+
+⏳ installation may took some time ⏳
+
+Pay attention to `[install:client]` and `[install:server]`, two applications are being installed at the same time - the client, where tasks will be performed, and the server, which will supply the front-end application with data.
+
+
+## 🏃 Launching the application
+
+### 🔗 Client and Server always together
+
+The repository is constructed in such a way that the client application and the server application are run simultaneously. This is required because one without the other will not function properly.
+
+From the root of your repository, launch a terminal and execute the command:
+
+        npm run start
+
+This command will launch 2 applications which will be available at the following addresses:
+- client - front-end application - http://localhost:3000
+- server - back-end application - http://localhost:4320
+    - API documentation is available at http://localhost:4320/swagger
 
 ### Storybook
-Do niektórych zadań będziesz potrzebować dodatkowej aplikacji - Storybook, która umożliwi Ci pracę nad niektórymi zadaniami. Treść zadania będzie wskazywać na potrzebę jej użycia.
 
-Storybook służy do pracy nad komponentami w izolacji. Jeżeli chcesz nanosić zmiany w wyglądzie lub funkcjonowaniu poszczególnych komponentów muszisz edytować odpowiadajce im pliki w katalogu `client/src/ui`.
+Storybook is for working on components in isolation. If you want to make changes to the appearance or functioning of individual components, you must edit the corresponding files in the `client/src/ui` directory.
 
-Aby uruchomić storybook należy wywołać następującą komendę znajdując się w katalogu głównym Twojego repozytorium:
-```bash
-npm run storybook
-```
+To run the storybook, run the following command from the root of your repository:
 
-Komenda ta uruchomi aplikację Storybook, która będzie dostępna pod adresem http://localhost:6006
+        npm run storybook
 
-## 🏃 Uruchomienie testów automatycznych
 
-Każde zadanie (wyłączając 1, 6, 7, 8) będzie udostepnione z wachlarzem testów automatycznych typu e2e. Pozwala to nam na automatyczne sprawdzenie czy zadanie zostało wykonane poprawnie, a także służy Ci za informacje na temat Twojego progresu.
+This command will launch the Storybook application, which will be available at http://localhost:6006
 
-Testy Automatyczne możesz i jest to wskazane, uruchomić lokalnie. Ten sam zestaw testów będzie również uruchamiany po przesłaniu Twojego rozwiązania do serwisu GitHub.
+## 🏃 Starting automatic tests
 
-Uruchamianie ich lokalnie pozwoli Ci sprawdzić czy zadanie zostało pomyślnie ukończone oraz ile jest jeszcze elemantów, które musisz poprawić.
+To run the tests, start the client and the server as before, run the command from the root directory:
 
-Aby uruchomić testy należy, uruchomić clienta i serwer (może być to ten sam proces który został uruchomiony w poprzednim zadaniu) tak jak do tej pory uruchomić komendę z poziomu katalogu głównego:
+        npm run cypress:open
 
-    npm run cypress:open
-
-To polecenie uruchomi panel Cypress, w którym możesz uruchomić wszystkie lub wybrane testy.
+This command will launch the Cypress panel where you can run all or selected tests.
 
 # FAQ
 
-## Jak dodać nowy pakiet npm?
-Uruchom terminal, przejdź do katalogu `/client` oraz wpisz polecenie `npm i :nazwa-pakietu`
+## How to add new npm package?
+Launch a terminal, go to the `/client` directory and type `npm i :package-name`
 
-## Co zrobić jeśli mam problem który nie został opisany w tej sekcji?
-Skorzystaj z dotępnej społeczności na dareit.circle.so i napisz Post. Mentorki lub inni uczestnicy napewno Ci pomogą.
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[React-url]: https://reactjs.org/
+[React-Query-url]: https://tanstack.com/query/v3/
+[React-Router-url]: https://reactrouter.com/en/main
+[React-Hook-Form-url]: https://react-hook-form.com/
+[MUI-url]: https://mui.com/material-ui/
+[Storybook-url]: https://storybook.js.org/
+[ChartJS-url]: https://react-chartjs-2.js.org/
+[Cypress-url]: https://www.cypress.io/
+[Swagger-url]: https://swagger.io/tools/swagger-ui/
+[VSC-url]: https://code.visualstudio.com/
+[Figma-url]: https://www.figma.com/
+[Git-url]: https://git-scm.com/
