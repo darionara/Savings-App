@@ -5,7 +5,7 @@ Saving App is an application enabling users to control their home budgets. It pr
 
 The goal of the challenge was to create a react app using some popular libraries, workshops, design and testing tools and communicate with the server using REST API.
 
-<img src='client/public/ledger_img.png' >
+<img src='client/public/ledger.png' >
 
 ## Built with
 [![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)][React-url]
