@@ -74,6 +74,7 @@ This command will launch the Cypress panel where you can run all or selected tes
 
 ## How to add new npm package?
 Launch a terminal, go to the `/client` directory and type `npm i :package-name`
+<<<<<<< HEAD
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
@@ -90,3 +91,22 @@ Launch a terminal, go to the `/client` directory and type `npm i :package-name`
 [VSC-url]: https://code.visualstudio.com/
 [Figma-url]: https://www.figma.com/
 [Git-url]: https://git-scm.com/
+=======
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[React-url]: https://reactjs.org/
+[React-Query-url]: https://tanstack.com/query/v3/
+[React-Router-url]: https://reactrouter.com/en/main
+[React-Hook-Form-url]: https://react-hook-form.com/
+[MUI-url]: https://mui.com/material-ui/
+[Storybook-url]: https://storybook.js.org/
+[ChartJS-url]: https://react-chartjs-2.js.org/
+[Cypress-url]: https://www.cypress.io/
+[Swagger-url]: https://swagger.io/tools/swagger-ui/
+[VSC-url]: https://code.visualstudio.com/
+[Figma-url]: https://www.figma.com/
+[Git-url]: https://git-scm.com/
+
+>>>>>>> 9668f057feae0b9a49a0f51827c43d70b444aa09
