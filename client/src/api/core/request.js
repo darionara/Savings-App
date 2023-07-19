@@ -40,7 +40,7 @@ function getQueryString(params) {
 
 function getUrl(options) {
   const path = options.path;
-  const url = `http://localhost:4320${path}`;
+  const url = `https://savings-app-react.onrender.com/${path}`;
   if (options.query) {
     return `${url}${getQueryString(options.query)}`;
   }
