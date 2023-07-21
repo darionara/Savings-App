@@ -4,7 +4,7 @@ import Router from './pages/routing';
 import { theme } from 'theme';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SnackbarProvider } from 'notistack';
-//import { StyledSnackbar } from './ui/atoms/Notification';
+import { StyledSnackbar, SuccessIcon, ErrorIcon } from './ui/atoms/Notification';
 
 const queryClient = new QueryClient();
 
@@ -20,10 +20,15 @@ const App = () => {
               vertical: 'bottom',
               horizontal: 'right'
             }}
-            /* Components={{
+            Components={{
               success: StyledSnackbar,
               error: StyledSnackbar,
-            }} */>
+            }}
+            iconVariant={{
+              success: <SuccessIcon />,
+              error: <ErrorIcon />,
+            }}
+          >
             <Router />
           </SnackbarProvider>
         </QueryClientProvider>
