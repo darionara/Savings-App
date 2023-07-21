@@ -32,9 +32,17 @@ export class LedgerService {
     return this.ledgerService.getAll();
   };
 
-  findAllWithLimitAndOffset = (params: { limit: number; offset: number }) => {
-    const { limit, offset } = params;
-    const all = this.ledgerService.getAll();
+  findAllWithLimitAndOffset = (params: { limit: number; offset: number, sort: string }) => {
+    const { limit, offset, sort } = params;
+    let all = this.ledgerService.getAll();
+
+    if (sort && sort.startsWith('-')) {
+      const sortKey = sort.slice(1);
+      all = all.sort((a, b) => b[sortKey] - a[sortKey]);
+    } else if (sort) {
+      all = all.sort((a, b) => a[sort] - b[sort]);
+    }
+
     if (offset > all.length) {
       return [];
     }

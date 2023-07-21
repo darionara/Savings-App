@@ -8,12 +8,13 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useSnackbar } from 'notistack';
 import { MESSAGES } from 'consts/Notification.messages';
-import { Row, HeadCell } from '../molecules/table/Table';
+import { HeadCell } from '../molecules/table/Table';
+import { Ledger, Mode } from '../../api/services/LedgerService';
 
 export const LedgerWidget = () => {
-  const [openModalType, setOpenModalType] = useState<'INCOME' | 'EXPENSE' | null>(null);
-  const [page, setPage] = useState<number>(0);
-  const [perPage, setPerPage] = useState<number>(10);
+  const [openModalType, setOpenModalType] = useState<Mode | null>(null);
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(10);
 
   const handlePageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number): void => {
     setPage(newPage);
@@ -27,16 +28,16 @@ export const LedgerWidget = () => {
   const queryClient = useQueryClient();
 
   // The 'total' metadata is not included in the backend, so I fetched all the data and got the length of the array to get the total amount of rows
-  const { data: totalLedgers } = useQuery<Row[]>({
+  const { data: totalLedgers } = useQuery<Ledger[]>({
     queryKey: [LEDGER_QUERY],
     queryFn: () => LedgerService.findAll(),
   });
 
   const totalRows = totalLedgers?.length ?? 0;
 
-  const { isLoading, data, error } = useQuery<Row[]>({
+  const { isLoading, data, error } = useQuery<Ledger[]>({
     queryKey: [LEDGER_QUERY, page, perPage],
-    queryFn: () => LedgerService.findAll(perPage, page * perPage),
+    queryFn: () => LedgerService.findAll(perPage, page * perPage, '-createdAt'),
   });
 
   const { enqueueSnackbar } = useSnackbar();
@@ -62,10 +63,10 @@ export const LedgerWidget = () => {
   const deleteRecords = (selectedRows: string[]) => deleteMutation.mutate(selectedRows);
 
   const headCells: HeadCell[] = [
-    {id: '1', label: 'Nazwa', renderCell: (row: Row) => row.title},
-    {id: '2', label: 'Kategoria', renderCell: (row: Row) => <CategoryCell name={row.category.name} color={row.category.color} />},
-    {id: '5', label: 'Data', renderCell: (row: Row) => <LocalizedDate date={row.createdAt} />},
-    {id: '4', label: 'Kwota', renderCell: (row: Row) => {
+    {id: '1', label: 'Nazwa', renderCell: (row: Ledger) => row.title},
+    {id: '2', label: 'Kategoria', renderCell: (row: Ledger) => <CategoryCell name={row.category.name} color={row.category.color} />},
+    {id: '5', label: 'Data', renderCell: (row: Ledger) => <LocalizedDate date={row.createdAt} />},
+    {id: '4', label: 'Kwota', renderCell: (row: Ledger) => {
       if (row.mode === 'INCOME') {
         return (
           <Typography color={'success.main'} variant={'body2'}> 
@@ -123,7 +124,7 @@ export const LedgerWidget = () => {
               headCells={headCells}
               rows={data}
               totalRows={totalRows}
-              getUniqueId={(row: Row): string => row.id}
+              getUniqueId={(row: Ledger): string => row.id}
               deleteRecords={deleteRecords}
               page={page}
               perPage={perPage}

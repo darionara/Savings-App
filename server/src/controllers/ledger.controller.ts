@@ -77,6 +77,7 @@ export class LedgerController implements OnModuleInit {
   findAll(
     @Query('limit') queryLimit?: number,
     @Query('offset') queryOffset?: number,
+    @Query('sort') sort?: string,
   ) {
     const limit = queryLimit ? Number(queryLimit) : undefined;
     const offset = queryOffset ? Number(queryOffset) : undefined;
@@ -94,17 +95,15 @@ export class LedgerController implements OnModuleInit {
 
     let records = [];
 
-    if (limit !== undefined && offset !== undefined) {
-      records = this.ledgerService.findAllWithLimitAndOffset({ limit, offset });
+    if (limit !==undefined && offset !== undefined) {
+      records = this.ledgerService.findAllWithLimitAndOffset({ limit, offset, sort });
     } else {
       records = this.ledgerService.findAll();
     }
 
     const categories = this.categoryService.getAll();
-    return records
-      .sort((a, b) => Number(b.createdAt) - Number(a.createdAt))
-      .map((record) => {
-        return {
+    return records.map((record) => {
+      return {
           ...record,
           category: categories.find((c) => c.id === record.categoryId) || {
             name: 'Nieskategoryzowane',
@@ -113,7 +112,7 @@ export class LedgerController implements OnModuleInit {
           },
         };
       });
-  }
+  } 
 
   @ApiOperation({
     summary: 'Znajdź wpis w księdze głównej',
