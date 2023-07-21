@@ -9,7 +9,7 @@ export { Loader } from './atoms/Loader';
 export { Error } from './atoms/Error';
 export { NoContent } from './atoms/NoContent';
 export { Card } from './atoms/Card';
-export { StyledSnackbar } from './atoms/Notification';
+export { StyledSnackbar, SuccessIcon, ErrorIcon } from './atoms/Notification';
 
 // molecules
 export { CategoryCell } from './molecules/CategoryCell';

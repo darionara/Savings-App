@@ -1,11 +1,13 @@
 # About the project
 The project was created as a part of the React Challenge v2 conducted by Dare IT - an organization supporting women to start career in the IT industry :cherry_blossom:
 
-Saving App is an application enabling users to control their home budgets. It provides inputs for by adding incomes and spendings on their daily basis and visualize the balance between them, using charts.
+Saving App is an application enabling to control household budget by adding everyday incomes and spendings. The balance between these two is visualized on a chart.
 
-The goal of the challenge was to create a react app using some popular libraries, workshops, design and testing tools and communicate with the server using REST API.
+The goal of the challenge was to create a React app using some popular libraries, workshops, design and testing tools and communicate with the server using REST API.
 
-<img src='client/public/ledger.png' >
+You can check it out here: [Savings App](https://savings-app.onrender.com/) :rocket:
+
+<img src='client/src/assets/ledger.png'>
 
 ## Built with
 [![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)][React-url]
@@ -74,8 +76,6 @@ This command will launch the Cypress panel where you can run all or selected tes
 
 ## How to add new npm package?
 Launch a terminal, go to the `/client` directory and type `npm i :package-name`
-<<<<<<< HEAD
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
@@ -91,22 +91,3 @@ Launch a terminal, go to the `/client` directory and type `npm i :package-name`
 [VSC-url]: https://code.visualstudio.com/
 [Figma-url]: https://www.figma.com/
 [Git-url]: https://git-scm.com/
-=======
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-
-[React-url]: https://reactjs.org/
-[React-Query-url]: https://tanstack.com/query/v3/
-[React-Router-url]: https://reactrouter.com/en/main
-[React-Hook-Form-url]: https://react-hook-form.com/
-[MUI-url]: https://mui.com/material-ui/
-[Storybook-url]: https://storybook.js.org/
-[ChartJS-url]: https://react-chartjs-2.js.org/
-[Cypress-url]: https://www.cypress.io/
-[Swagger-url]: https://swagger.io/tools/swagger-ui/
-[VSC-url]: https://code.visualstudio.com/
-[Figma-url]: https://www.figma.com/
-[Git-url]: https://git-scm.com/
-
->>>>>>> 9668f057feae0b9a49a0f51827c43d70b444aa09
