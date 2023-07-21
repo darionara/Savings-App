@@ -10,36 +10,18 @@ import TablePagination from '@mui/material/TablePagination';
 import Checkbox from '@mui/material/Checkbox';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
-
-export interface Category {
-  id: string;
-  name: string;
-  color: string;
-  budgetId?: string | null;
-  ledgerIds?: string | string[];
-  createdAt?: number;
-}
-
-export interface Row {
-  id: string;
-  categoryId: string | null;
-  createdAt: number;
-  title: string;
-  mode: 'INCOME' | 'EXPENSE';
-  amountInCents: number;
-  category: Category;
-}
+import { Ledger } from '../../../api/services/LedgerService';
 
 export interface HeadCell {
   id: string;
   label: string;
-  renderCell: (row: Row) => React.ReactNode | string;
+  renderCell: (row: Ledger) => React.ReactNode | string;
 }
 
 interface TableProps {
   headCells: HeadCell[];
-  rows: Row[];
-  getUniqueId: (row: Row) => string;
+  rows: Ledger[];
+  getUniqueId: (row: Ledger) => string;
   deleteRecords: (selectedRows: string[]) => void;
   page: number;
   perPage: number;
@@ -52,7 +34,7 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords, page, perPa
   const [selected, setSelected] = React.useState<string[]>([]);
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelected(event.target.checked ? rows.map((n: Row) => getUniqueId(n)) : []);   
+    setSelected(event.target.checked ? rows.map((n: Ledger) => getUniqueId(n)) : []);   
   };
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {   

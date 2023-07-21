@@ -1,27 +1,25 @@
 import { request } from '../core/request';
 
-interface RequestBodyCreate {
-  mode: 'INCOME' | 'EXPENSE';
+export type Mode = 'INCOME' | 'EXPENSE';
+
+interface CreateLedger {
+  mode: Mode;
   amountInCents: number;
   categoryId: string | null;
   title: string;
 }
 
-interface RequestBodyUpdate {
+interface UpdateLedger extends CreateLedger{
   id: number;
   createdAt: number;
-  title: string;
-  mode: 'INCOME' | 'EXPENSE';
-  amountInCents: number;
-  categoryId: string | null;
 }
 
-interface ResponseBody {
+export interface Ledger {
   id: string;
   categoryId: string | null;
   createdAt: number;
   title: string;
-  mode: 'INCOME' | 'EXPENSE';
+  mode: Mode;
   amountInCents: number;
   category: {
     name: string;
@@ -30,16 +28,7 @@ interface ResponseBody {
     budgetId?: string;
     ledgerIds?: string | string[];
     createdAt?: number;
-  }
-}
-
-interface ResponseBodyCreate {
-  mode: 'INCOME' | 'EXPENSE';
-  title: string;
-  amountInCents: number;
-  categoryId: string | null;
-  createdAt: number;
-  id: string;
+  };
 }
 
 export class LedgerService {
@@ -47,7 +36,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static create({ requestBody }: { requestBody: RequestBodyCreate}): Promise<ResponseBodyCreate> {
+  static create({ requestBody }: { requestBody: CreateLedger }): Promise<Ledger> {
     return request({
       method: 'POST',
       path: `/ledger`,
@@ -60,12 +49,11 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  //`/ledger?limit=${limit}&offset=${offset}`
-  static findAll(limit?: number, offset?: number): Promise<ResponseBody[]> {
+  static findAll(limit?: number, offset?: number, sort?: string): Promise<Ledger[]> {
     return request({
       method: 'GET',
       path: `/ledger`,
-      query: {limit, offset}
+      query: { limit, offset, sort },
     });
   }
 
@@ -73,7 +61,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findOne({ id }: { id: string }): Promise<ResponseBody> {
+  static findOne({ id }: { id: string }): Promise<Ledger> {
     return request({
       method: 'GET',
       path: `/ledger/${id}`,
@@ -84,7 +72,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static update({ id, requestBody }: { id: string; requestBody: RequestBodyUpdate }): Promise<ResponseBodyCreate> {
+  static update({ id, requestBody }: { id: string; requestBody: UpdateLedger }): Promise<void> {
     return request({
       method: 'PATCH',
       path: `/ledger/${id}`,
