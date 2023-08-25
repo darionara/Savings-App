@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Modal, CategorySelect, AmountFormField, Loader, Error, NoContent } from 'ui';
 import { formatDollarsToCents } from 'utils';
 import { MESSAGES } from 'consts/Notification.messages';
+import { LIMITS } from 'consts/Limits';
 
 export const AddNewBudgetRecord = ({ onClose, open, showNotification }) => {
   const queryClient = useQueryClient();
@@ -73,7 +74,7 @@ export const AddNewBudgetRecord = ({ onClose, open, showNotification }) => {
           <AmountFormField 
             control={control}
             errors={errors} 
-            lessThan={1000000}
+            lessThan={LIMITS.LESS_THAN}
           />
           <Controller 
             name='category'

@@ -8,11 +8,8 @@ import { TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { formatDollarsToCents } from 'utils';
 import { MESSAGES } from 'consts/Notification.messages';
-
-const descriptions = {
-  INCOME: 'Dodaj wpływ',
-  EXPENSE: 'Dodaj wydatek'
-};
+import { DESCRIPTIONS } from 'consts/Descriptions';
+import { LIMITS } from 'consts/Limits';
 
 export const AddNewLedgerRecord = ({ type, onClose, open, showNotification }) => {
   const queryClient = useQueryClient();
@@ -69,7 +66,7 @@ export const AddNewLedgerRecord = ({ type, onClose, open, showNotification }) =>
   };
 
   return (
-    <Modal description={descriptions[type]} 
+    <Modal description={DESCRIPTIONS[type]} 
            onClose={onClose}
            onSubmit={handleSubmit(handleFormSubmit)}
            open={open}
@@ -87,7 +84,7 @@ export const AddNewLedgerRecord = ({ type, onClose, open, showNotification }) =>
             rules={{
               required: 'Nazwa nie może być pusta',
               validate: {
-                noEmptySpaces: value => !value.trim().length ? 'Nazwa nie może byc pusta' : true
+                noEmptySpaces: value => !value.trim().length ? 'Nazwa nie może być pusta' : true
               }
             }}
             render={({ field }) => (
@@ -103,7 +100,7 @@ export const AddNewLedgerRecord = ({ type, onClose, open, showNotification }) =>
           <AmountFormField 
             control={control}
             errors={errors} 
-            lessThan={1000000}
+            lessThan={LIMITS.LESS_THAN}
           />
           {type === 'EXPENSE' && (
             <Controller 

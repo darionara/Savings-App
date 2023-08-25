@@ -36,6 +36,10 @@ let theme = createTheme({
       light: '#FFF5D2',
       contrastText: '#fff',
     },
+    grey: {
+      main: '#33333340',
+      light: '#33333312'
+    },
     background: {
       default: '#F8F8F8',
     },
