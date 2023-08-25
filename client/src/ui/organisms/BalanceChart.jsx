@@ -28,7 +28,7 @@ export const BalanceChart = () => {
   };
 
   const options = {
-    aspectRatio: 1,
+    maintainAspectRatio: false,
     devicePixelRatio: 4,
     plugins: {
       legend: {
@@ -52,8 +52,8 @@ export const BalanceChart = () => {
             sx={{mb: 5}}
           />
           <CardContent sx={{paddingBottom: 0}}>
-            <div style={{width: '100%', height: '212px'}}>
-              <Doughnut data={summary} options={options} style={{marginLeft: 'calc(50% - 106px)'}}/>
+            <div style={{width: '212px', height: '212px', margin: '0 auto'}}>
+              <Doughnut data={summary} options={options}/>
             </div>
             <CustomLegend 
               labels={data?.spending.map((spending) => 

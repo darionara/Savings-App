@@ -14,7 +14,7 @@ interface UpdateLedger extends CreateLedger{
   createdAt: number;
 }
 
-export interface Ledger {
+export type Ledger = {
   id: string;
   categoryId: string | null;
   createdAt: number;

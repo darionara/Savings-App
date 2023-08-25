@@ -82,6 +82,12 @@ export const LedgerWidget = () => {
     }
   ];
 
+  isLoading && <Loader />
+
+  error && <Error error={error} />
+  
+  !isLoading && !error && !data?.length && <NoContent />
+
   return (
     <Card
       subheader=''
@@ -114,11 +120,6 @@ export const LedgerWidget = () => {
     >
       <Grid container>
         <Grid item xs={12}>
-          <>
-          {isLoading && <Loader />}
-          {error && <Error error={error} />}
-          {!isLoading && !error && !data?.length && <NoContent />}
-          </>
           {!isLoading && !error && !!data?.length && (
             <Table
               headCells={headCells}

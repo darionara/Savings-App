@@ -12,7 +12,7 @@ import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 import { Ledger } from '../../../api/services/LedgerService';
 
-export interface HeadCell {
+export type HeadCell = {
   id: string;
   label: string;
   renderCell: (row: Ledger) => React.ReactNode | string;

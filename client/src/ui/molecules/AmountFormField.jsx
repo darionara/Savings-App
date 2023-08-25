@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from 'react-hook-form';
 import { TextField } from '@mui/material';
+import { LIMITS } from 'consts/Limits';
 
 export const AmountFormField = ({ control, errors, lessThan }) => {
   return (
@@ -11,7 +12,7 @@ export const AmountFormField = ({ control, errors, lessThan }) => {
       rules={{
         required: 'Kwota nie może być pusta',
         validate: {
-          greaterThanZero: value => value > 0 || 'Kwota musi być większa niż 0',
+          greaterThanZero: value => value > LIMITS.MORE_THAN || 'Kwota musi być większa niż 0',
           lessThanMillion: value => value <= lessThan || `Kwota nie może być większa niż ${lessThan}`
         }
       }}
