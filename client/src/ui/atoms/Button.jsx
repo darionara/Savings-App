@@ -12,6 +12,10 @@ const StyledButton = styled(MuiButton)(({ theme, color }) => ({
       backgroundColor: theme.palette.error.main,
       color: '#fff',
       },
+      '&:disabled': {
+        backgroundColor: theme.palette.grey.light,
+        color: theme.palette.grey.main,
+      },
     }),
     ...(color==='success' && {
       backgroundColor: theme.palette.success.light,
@@ -20,6 +24,10 @@ const StyledButton = styled(MuiButton)(({ theme, color }) => ({
       backgroundColor: theme.palette.success.main,
       color: '#fff', 
       },
+      '&:disabled': {
+        backgroundColor: theme.palette.grey.light,
+        color: theme.palette.grey.main,
+      },
     }),
     ...(color==='warning' && {
       backgroundColor: theme.palette.warning.light,
@@ -27,6 +35,10 @@ const StyledButton = styled(MuiButton)(({ theme, color }) => ({
       '&:hover': {
       backgroundColor: theme.palette.warning.main, 
       color: '#fff',
+      },
+      '&:disabled': {
+        backgroundColor: theme.palette.grey.light,
+        color: theme.palette.grey.main,
       },
     }),
   },
@@ -37,12 +49,21 @@ const StyledButton = styled(MuiButton)(({ theme, color }) => ({
       '&:hover': {
         backgroundColor: theme.palette.secondary.dark, 
       },
+      '&:disabled': {
+        backgroundColor: theme.palette.grey.light,
+        color: theme.palette.grey.main,
+      },
     }),
     ...(color==='error' && {
       backgroundColor: '#fff',
       borderColor: theme.palette.error.main,
       '&:hover, :active': {
       backgroundColor: '#FDE8E0', 
+      },
+      '&:disabled': {
+        backgroundColor: '#fff',
+        color: theme.palette.grey.main,
+        borderColor: theme.palette.grey.light,
       },
     }),
     ...(color==='success' && {
@@ -51,12 +72,22 @@ const StyledButton = styled(MuiButton)(({ theme, color }) => ({
       '&:hover, :active': {
       backgroundColor: theme.palette.success.light, 
       },
+      '&:disabled': {
+        backgroundColor: '#fff',
+        color: theme.palette.grey.main,
+        borderColor: theme.palette.grey.light,
+      },
     }),
     ...(color==='warning' && {
       backgroundColor: '#fff',
       borderColor: theme.palette.warning.main,
       '&:hover, :active': {
       backgroundColor: theme.palette.warning.light, 
+      },
+      '&:disabled': {
+        backgroundColor: '#fff',
+        color: theme.palette.grey.main,
+        borderColor: theme.palette.grey.light,
       },
     }),
   },

@@ -10,7 +10,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 export default {
   title: 'Zadanie 1/Button',
   component: Button,
-  description: 'ahaha',
+  description: 'Create versions of a button',
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     variant: {
